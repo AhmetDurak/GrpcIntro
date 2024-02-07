@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+option csharp_namespace = "gRPCService";
+
+service Reporter{
+    rpc SendTestData (TestData) returns (Response);
+    rpc SendTestDatas (TestDataList) returns (Response);
+    rpc DBConnect(Action) returns (Response);
+    rpc DBDisconnect(Action) returns (Response);
+    rpc GetGrpcLogs(Action) returns (Log);
+}
+message Action{}
+message Response{
+    int32 status = 1;
+}
+message TestDataList{
+    repeated TestData repeatedTestData = 1;
+}
+message TestData {
+    string measurement = 1;
+    Status status = 2;
+    Stage stage = 3;
+    optional string parentID = 4;
+    string itemType = 5;
+    optional string stepID = 6;
+    optional int64 start = 7;
+    optional int64 stop = 8;
+    string fieldName = 9;
+    float fieldValue = 10;
+    int64 timestamp = 11;
+    optional string description = 12;
+    optional string historyID = 13;
+    optional string itemID = 14;
+    repeated Tags tag = 15;
+
+    enum Status {
+        none = 0;
+        fail = 1;
+        pass = 2;
+        skip = 3;
+        error = 4;
+    }
+    enum Stage {
+        none_ = 0;
+        scheduled = 1;
+        running = 2;
+        finished = 3;
+        pending = 4;
+        interrupted = 5;
+    }
+
+}
+message Tags{
+    Tag tag = 1;
+    optional int32 valueInt = 2;
+    optional string valueStr = 3;
+    optional bool valueBool = 4;
+}
+enum Tag {
+    parentID_ = 0;
+    itemID_ = 1;
+    itemType_ = 2;
+    historyID_ = 3;
+    severity = 4;
+    epic = 5;
+    fullName = 6;
+    name = 7;
+    description_ = 8;
+    start_ = 9;
+    stop_ = 10;
+    stage_ = 11;
+    status_ = 12;
+    linkType = 13;
+    attachment = 14;
+    label = 15;
+    parameter = 16;
+}
+message Log{
+    string logData = 1;
+}
